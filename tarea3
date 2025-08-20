@@ -1,0 +1,32 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/2/And.hdl
+/**
+ * (x, y, z)
+ * (f1, f2) 
+ * f1 = z'(x' + y')
+ * f2 = xy + x'y'z + x'yz'
+ */
+CHIP SistemaLogico {
+    IN x, y, z;
+    OUT f1, f2;
+
+    PARTS:
+    Not(in=x, out=nx);
+    Not(in=y, out=ny);
+    Not(in=z, out=nz);
+    And(a=x, b=y, out=xy); 
+
+    Or(a=z, b=xy, out=zOrXY);
+    Not(in=zOrXY, out=f1);
+
+        And(a=nx, b=ny, out=nxny);
+    And(a=nxny, b=z, out=term2);
+
+        And(a=nx, b=y, out=nxy);
+    And(a=nxy, b=nz, out=term3);
+    
+    Or(a=xy, b=term2, out=sum_f2_1);
+        Or(a=sum_f2_1, b=term3, out=f2);
+}
